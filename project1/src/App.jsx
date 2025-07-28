@@ -1,38 +1,40 @@
+import './App.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useState } from 'react';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import Card from './Components/Card/Card';
+import Product from './Components/Card/Product';
+import Layout from './Components/Card/Layout';
+import Login from './Components/Card/login/Login';
+import Register from './Components/Card/register/Register';
 
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import '@fortawesome/fontawesome-free/css/all.min.css'
-import Card from './components/Card/card'
-import Home from './Components/Card/Start'
-import About from './Components/Card/About'
-import Gallary from './Components/Card/Profolio'
-import Navbar from './Components/Card/Navbar'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Layout from './Layout'
-import Product from './Components/Card/Contact'
-import Start from './Components/Card/Start'
-import Profolio from './Components/Card/Profolio'
-import Contact from './Components/Card/Contact'
+export default function App() {
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
-function App() {
+  function toggletheme() {
+    if (theme === 'light') {
+      setTheme('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      setTheme('light');
+      localStorage.setItem('theme', 'light');
+    }
+  }
 
+  const routers = createBrowserRouter([
+    {
+      path: '/',
+      element: <Layout theme={theme} toggletheme={toggletheme} />,
+      children: [
+        { index: true, element: <Navigate to="/card" /> },
+        { path: 'card', element: <Card /> },
+        { path: 'product/:id', element: <Product /> },
+        { path: 'login', element: <Login/> },
+        { path: 'register', element: <Register/>},
 
-let Router= createBrowserRouter([
-    {path:'',element:<Layout/>, children:[ 
-      {path:'start framework',element:<Start/>},
-      {path:'/about',element:<About/>},
-      {path:'/profolio',element:<Profolio/>},
-      {path:'/contact',element:<Contact/>}]}
-])
+      ],
+    },
+  ]);
 
-  return (
-    <>
-      <RouterProvider router={Router} />
-
-
-    </>
-  );
+  return <RouterProvider router={routers} />;
 }
-
-export default App
