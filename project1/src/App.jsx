@@ -1,38 +1,111 @@
+import './App.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import Navbar from './Components/Card/Navbar';
+import Card from './Components/Card/Card';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Home from './pages/Home';
+import Layout from './Components/Card/Layout';
+import Product from './pages/Product';
+import Categories from './pages/Categories';
+import Brands from './pages/Brands';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import ProtectedRoutes from './pages/Protected/ProtectedRoutes';
+import AuthContextProvider from './pages/Context/AuthContext';
+import ProtectedLogin from './pages/Protected/ProtectedLogin';
+import ForgetPassword from './pages/ForgetPassword';
+import ProductDetails from './pages/ProductDetails';
+import CartContextProvider from './pages/Context/CartContext';
+import Cart from './pages/Cart';
+import NotFound from './Components/Card/NotFound';
+import ResetPassword from './pages/ResetPassword';
+import NewPassword from './pages/NewPassword';
+import CheckOut from './pages/CheckOut';
+import AllOrders from './pages/AllOrders';
+import { Toaster } from 'react-hot-toast';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import '@fortawesome/fontawesome-free/css/all.min.css'
-import Card from './components/Card/card'
-import Home from './Components/Card/Start'
-import About from './Components/Card/About'
-import Gallary from './Components/Card/Profolio'
-import Navbar from './Components/Card/Navbar'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Layout from './Layout'
-import Product from './Components/Card/Contact'
-import Start from './Components/Card/Start'
-import Profolio from './Components/Card/Profolio'
-import Contact from './Components/Card/Contact'
 
-function App() {
+export default function App() {
 
 
-let Router= createBrowserRouter([
-    {path:'',element:<Layout/>, children:[ 
-      {path:'start framework',element:<Start/>},
-      {path:'/about',element:<About/>},
-      {path:'/profolio',element:<Profolio/>},
-      {path:'/contact',element:<Contact/>}]}
-])
+
+
+ 
+
+    let routers=createBrowserRouter([
+      {path:"/",element:<Layout/>,children:[
+        { index: true, element: <Login /> },
+        {path:"*",element:<NotFound/>},
+        {path:"/home",element:<ProtectedRoutes>
+          <Home/>
+        </ProtectedRoutes>},
+        {path:"/product",element:<ProtectedRoutes>
+          <Product/>
+        </ProtectedRoutes>
+        },
+{path:"/productDetails/:id", element:
+  <ProtectedRoutes>
+    <ProductDetails />
+  </ProtectedRoutes>
+},        
+        {path:"/categories",element:<ProtectedRoutes>
+          <Categories/>
+        </ProtectedRoutes>},
+        {path:"/brands",element:<ProtectedRoutes>
+          <Brands/>
+        </ProtectedRoutes>
+        },
+        {path:"/allOrders",element:<ProtectedRoutes>
+          <AllOrders/>
+        </ProtectedRoutes>},
+        {path:"/cart",element:<ProtectedRoutes>
+          <Cart/>
+        </ProtectedRoutes>},
+         {path:"/checkout",element:<ProtectedRoutes>
+          <CheckOut/>
+        </ProtectedRoutes>},
+        
+        
+        
+
+        {path:"/register",element:<ProtectedLogin>
+          <Register/>
+        </ProtectedLogin>},
+        {path:"/login",element:<ProtectedLogin>
+          <Login/>
+        </ProtectedLogin>},
+        {path:"/forgetPassword",element:<ForgetPassword/>},
+        {path:"/resetPassword",element:<ResetPassword/>},
+        {path:"/newPassword",element:<NewPassword/>},
+
+
+      ]}
+    ])
+
 
   return (
     <>
-      <RouterProvider router={Router} />
 
 
-    </>
-  );
-}
 
-export default App
+<AuthContextProvider>
+  <CartContextProvider>
+    <Toaster
+      duration={7000}
+      position="top-center"
+      toastOptions={{
+        style: {
+          background: '#00C88C',
+          color: 'white',
+        },
+      }}
+    />
+    <RouterProvider router={routers} />
+  </CartContextProvider>
+</AuthContextProvider>
+
+   </>
+  )
+};
